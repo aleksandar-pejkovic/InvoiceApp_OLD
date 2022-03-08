@@ -3,11 +3,11 @@ package com.invoiceApp.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-//import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.invoiceApp.dto.CustomerDTO;
 import com.invoiceApp.entity.Customer;
 import com.invoiceApp.entity.Invoice;
 import com.invoiceApp.repository.CustomerRepository;
@@ -67,12 +67,11 @@ public class CustomerService {
 		return (List<Customer>) repo.findAll();
 	}
 
-	public Customer update(Customer customer, Long id) {
+	public Customer update(CustomerDTO newCustomerDto, CustomerDTO oldCustomerDto) {
 		try {
-			Customer existingCustomer = repo.findById(id).get();
-			BeanUtils.copyProperties(customer, existingCustomer, "id");
-			// ModelMapper modelMapper = new ModelMapper();
-			// modelMapper.map(customer, existingCustomer);
+			Customer existingCustomer = repo.findByName(oldCustomerDto.getName());
+			ModelMapper modelMapper = new ModelMapper();
+			modelMapper.map(newCustomerDto, existingCustomer);
 			return repo.save(existingCustomer);
 		} catch (NoSuchElementException e) {
 			e.toString();

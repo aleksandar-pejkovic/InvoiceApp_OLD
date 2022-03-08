@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.invoiceApp.dto.CustomerDTO;
 import com.invoiceApp.entity.Customer;
 import com.invoiceApp.entity.Invoice;
 import com.invoiceApp.service.CustomerService;
@@ -40,8 +41,8 @@ public class CustomerController {
 	}
 
 	@PutMapping("/{id}")
-	public Customer updateCustomer(@RequestBody Customer customer, @PathVariable Long id) {
-		return service.update(customer, id);
+	public Customer updateCustomer(@RequestBody CustomerDTO newCustomerDto, @RequestBody CustomerDTO oldCustomerDto) {
+		return service.update(newCustomerDto, oldCustomerDto);
 	}
 
 	@DeleteMapping("/{id}")
@@ -66,7 +67,6 @@ public class CustomerController {
 
 	@GetMapping("/name/{name}/invoices")
 	public List<Invoice> getCustomerInvoices(@PathVariable String name) {
-
 		return service.findByName(name).getInvoices();
 	}
 
