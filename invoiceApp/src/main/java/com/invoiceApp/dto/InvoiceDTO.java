@@ -3,26 +3,21 @@ package com.invoiceApp.dto;
 import java.util.Date;
 import java.util.List;
 
-import com.invoiceApp.entity.Customer;
-import com.invoiceApp.entity.Item;
-
 public class InvoiceDTO {
 
 	private String name;
 	private Date date;
-	private Customer customer;
-	private List<Item> items;
+	private CustomerDTO customerDto;
+	private List<ItemDTO> itemsDto;
 
 	public InvoiceDTO() {
-		super();
 	}
 
-	public InvoiceDTO(String name, Date date, Customer customer, List<Item> items) {
-		super();
+	public InvoiceDTO(String name, Date date, CustomerDTO customerDto, List<ItemDTO> itemsDto) {
 		this.name = name;
 		this.date = date;
-		this.customer = customer;
-		this.items = items;
+		this.customerDto = customerDto;
+		this.itemsDto = itemsDto;
 	}
 
 	public String getName() {
@@ -41,20 +36,20 @@ public class InvoiceDTO {
 		this.date = date;
 	}
 
-	public Customer getCustomer() {
-		return customer;
+	public CustomerDTO getCustomer() {
+		return customerDto;
 	}
 
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
+	public void setCustomer(CustomerDTO customerDto) {
+		this.customerDto = customerDto;
 	}
 
-	public List<Item> getItems() {
-		return items;
+	public List<ItemDTO> getItemsDto() {
+		return itemsDto;
 	}
 
-	public void setItems(List<Item> items) {
-		this.items = items;
+	public void setItems(List<ItemDTO> itemsDto) {
+		this.itemsDto = itemsDto;
 	}
 
 }

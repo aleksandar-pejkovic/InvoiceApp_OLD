@@ -7,38 +7,30 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.invoiceApp.dto.CustomerDTO;
 import com.invoiceApp.entity.Customer;
-import com.invoiceApp.entity.Invoice;
 import com.invoiceApp.repository.CustomerRepository;
 
 @Service
 public class CustomerService {
 
 	@Autowired
-	CustomerRepository repo;
+	CustomerRepository repository;
 
-	public Customer newCustomer(Customer customer) {
-		
-		if (repo.findByName(customer.getName()) == null) {
-			for (int i = 0; i < customer.getInvoices().size(); i++) {
-				Invoice invoice = customer.getInvoices().get(i);
-				invoice.setCustomer(customer);
-				customer.getInvoices().set(i, invoice);
-			}
+	public Customer createCustomer(Customer customer) {
 
-			return repo.save(customer);
-		} else
+		if (repository.findByName(customer.getName()) != null)
 			return null;
+		
+		return repository.save(customer);
 	}
 
-	public List<Customer> newCustomers(List<Customer> customers) {
-		return (List<Customer>) repo.saveAll(customers);
+	public List<Customer> createCustomers(List<Customer> customers) {
+		return (List<Customer>) repository.saveAll(customers);
 	}
 
 	public Customer findById(Long id) {
 		try {
-			return repo.findById(id).get();
+			return repository.findById(id).get();
 		} catch (NoSuchElementException e) {
 			System.out.println("No such element");
 			return null;
@@ -47,7 +39,7 @@ public class CustomerService {
 
 	public Customer findByName(String name) {
 		try {
-			return repo.findByName(name);
+			return repository.findByName(name);
 		} catch (NoSuchElementException e) {
 			System.out.println("No such element");
 			return null;
@@ -56,7 +48,7 @@ public class CustomerService {
 
 	public Customer findByPib(String pib) {
 		try {
-			return repo.findByPib(pib);
+			return repository.findByPib(pib);
 		} catch (NoSuchElementException e) {
 			System.out.println("No such element");
 			return null;
@@ -64,15 +56,15 @@ public class CustomerService {
 	}
 
 	public List<Customer> findAll() {
-		return (List<Customer>) repo.findAll();
+		return (List<Customer>) repository.findAll();
 	}
 
-	public Customer update(CustomerDTO newCustomerDto, CustomerDTO oldCustomerDto) {
+	public Customer updateCustomer(Customer newCustomer, String oldName) {
 		try {
-			Customer existingCustomer = repo.findByName(oldCustomerDto.getName());
+			Customer existingCustomer = repository.findByName(oldName);
 			ModelMapper modelMapper = new ModelMapper();
-			modelMapper.map(newCustomerDto, existingCustomer);
-			return repo.save(existingCustomer);
+			modelMapper.map(newCustomer, existingCustomer);
+			return repository.save(existingCustomer);
 		} catch (NoSuchElementException e) {
 			e.toString();
 			return null;
@@ -80,10 +72,10 @@ public class CustomerService {
 	}
 
 	public String deleteCustomer(Long id) {
-		Customer existingCustomer = new Customer();
 		try {
-			existingCustomer = repo.findById(id).get();
-			repo.delete(existingCustomer);
+			Customer existingCustomer = new Customer();
+			existingCustomer = repository.findById(id).get();
+			repository.delete(existingCustomer);
 			return "Customer deleted";
 		} catch (NoSuchElementException e) {
 			e.toString();
