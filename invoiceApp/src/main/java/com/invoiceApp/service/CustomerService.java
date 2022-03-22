@@ -3,6 +3,8 @@ package com.invoiceApp.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.persistence.EntityExistsException;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ public class CustomerService {
 	public Customer createCustomer(Customer customer) {
 
 		if (repository.findByName(customer.getName()) != null)
-			return null;
+			throw new EntityExistsException();
 		
 		return repository.save(customer);
 	}

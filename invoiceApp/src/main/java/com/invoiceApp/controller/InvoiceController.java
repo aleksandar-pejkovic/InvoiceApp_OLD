@@ -25,12 +25,12 @@ public class InvoiceController {
 
 	@PostMapping
 	public Invoice createInvoice(@RequestBody Invoice invoice) {
-		return service.newInvoice(invoice);
+		return service.createInvoice(invoice);
 	}
 
 	@PostMapping("/all")
 	public List<Invoice> createInvoices(@RequestBody List<Invoice> invoices) {
-		return service.newInvoices(invoices);
+		return service.createInvoices(invoices);
 	}
 
 	@PutMapping("/{id}")
