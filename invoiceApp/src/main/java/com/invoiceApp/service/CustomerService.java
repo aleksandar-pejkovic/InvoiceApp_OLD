@@ -27,10 +27,6 @@ public class CustomerService {
 		return customerRepository.save(customer);
 	}
 
-	public List<Customer> createCustomers(List<Customer> customers) {
-		return (List<Customer>) customerRepository.saveAll(customers);
-	}
-
 	public Customer findById(Long id) {
 		try {
 			return customerRepository.findById(id).get();

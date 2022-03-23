@@ -35,10 +35,6 @@ public class InvoiceService {
 		return invoiceRepository.save(invoice);
 	}
 
-	public List<Invoice> createInvoices(List<Invoice> invoices) {
-		return (List<Invoice>) invoiceRepository.saveAll(invoices);
-	}
-
 	public Invoice findById(Long id) {
 		try {
 			return invoiceRepository.findById(id).get();

@@ -32,11 +32,6 @@ public class InvoiceController {
 		return invoiceService.createInvoice(invoice);
 	}
 
-	@PostMapping("/createAll")
-	public List<Invoice> createInvoices(@RequestBody List<Invoice> invoices) {
-		return invoiceService.createInvoices(invoices);
-	}
-
 	@PutMapping("/update/{name}")
 	public Invoice updateInvoice(@RequestBody InvoiceDTO invoiceDto, @PathVariable String oldName) {
 		Invoice newInvoice = invoiceService.invoiceDtoToInvoice(invoiceDto);

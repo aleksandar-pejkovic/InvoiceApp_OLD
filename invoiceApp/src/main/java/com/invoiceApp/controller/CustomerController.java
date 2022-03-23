@@ -49,11 +49,6 @@ public class CustomerController {
 		return customerService.createCustomer(customer);
 	}
 
-	@PostMapping("/createAll")
-	public List<Customer> createCustomers(@RequestBody List<Customer> customers) {
-		return customerService.createCustomers(customers);
-	}
-
 	@PutMapping("/update/{oldName}")
 	public Customer updateCustomer(@RequestBody CustomerDTO newCustomerDto, @PathVariable String oldName) {
 		Customer newCustomer = customerService.customerDtoToCustomer(newCustomerDto, oldName);
