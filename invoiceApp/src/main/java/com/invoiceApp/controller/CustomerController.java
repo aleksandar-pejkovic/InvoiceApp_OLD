@@ -60,17 +60,6 @@ public class CustomerController {
 		return customerService.deleteCustomer(name);
 	}
 
-	@GetMapping("/id/{id}")
-	public CustomerDTO findCustomerById(@PathVariable Long id) {
-		try {
-			Customer customer = customerService.findById(id);
-			return customerService.customerToCustomerDto(customer);
-		} catch (NullPointerException e) {
-			e.getMessage();
-			return null;
-		}
-	}
-
 	@GetMapping("/name/{name}")
 	public CustomerDTO findCustomerByName(@PathVariable String name) {
 		Customer customer = customerService.findByName(name);
