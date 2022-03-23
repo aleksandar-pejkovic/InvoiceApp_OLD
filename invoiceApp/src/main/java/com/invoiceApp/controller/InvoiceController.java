@@ -2,6 +2,7 @@ package com.invoiceApp.controller;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.invoiceApp.dto.InvoiceDTO;
 import com.invoiceApp.entity.Customer;
 import com.invoiceApp.entity.Invoice;
 import com.invoiceApp.service.InvoiceService;
@@ -21,46 +23,49 @@ import com.invoiceApp.service.InvoiceService;
 public class InvoiceController {
 
 	@Autowired
-	InvoiceService service;
+	InvoiceService invoiceService;
 
-	@PostMapping
-	public Invoice createInvoice(@RequestBody Invoice invoice) {
-		return service.createInvoice(invoice);
+	@PostMapping("/create")
+	public Invoice createInvoice(@RequestBody InvoiceDTO invoiceDto) {
+		Invoice invoice = new Invoice();
+		BeanUtils.copyProperties(invoiceDto, invoice);
+		return invoiceService.createInvoice(invoice);
 	}
 
-	@PostMapping("/all")
+	@PostMapping("/createAll")
 	public List<Invoice> createInvoices(@RequestBody List<Invoice> invoices) {
-		return service.createInvoices(invoices);
+		return invoiceService.createInvoices(invoices);
 	}
 
-	@PutMapping("/{id}")
-	public Invoice updateInvoice(@RequestBody Invoice invoice, @PathVariable Long id) {
-		return service.update(invoice, id);
+	@PutMapping("/update/{name}")
+	public Invoice updateInvoice(@RequestBody InvoiceDTO invoiceDto, @PathVariable String oldName) {
+		Invoice newInvoice = invoiceService.invoiceDtoToInvoice(invoiceDto);
+		return invoiceService.update(newInvoice, oldName);
 	}
 
-	@DeleteMapping("/{id}")
-	public String deleteInvoice(@PathVariable Long id) {
-		return service.deleteInvoice(id);
+	@DeleteMapping("/{name}")
+	public String deleteInvoice(@PathVariable String name) {
+		return invoiceService.deleteInvoice(name);
 	}
 
 	@GetMapping("/id/{id}")
 	public Invoice findInvoiceById(@PathVariable Long id) {
-		return service.findById(id);
+		return invoiceService.findById(id);
 	}
 
 	@GetMapping("/name/{name}")
 	public Invoice findInvoiceByName(@PathVariable String name) {
-		return service.findByName(name);
+		return invoiceService.findByName(name);
 	}
 
 	@GetMapping("/byCustomer")
 	public List<Invoice> findInvoiceByCustomer(@RequestBody Customer customer) {
-		return service.findByCustomer(customer);
+		return invoiceService.findByCustomer(customer);
 	}
 
 	@GetMapping
 	public List<Invoice> findAllInvoices() {
-		return service.findAll();
+		return invoiceService.findAll();
 	}
 
 }

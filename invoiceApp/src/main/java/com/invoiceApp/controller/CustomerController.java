@@ -3,7 +3,7 @@ package com.invoiceApp.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,11 +31,21 @@ public class CustomerController {
 	@Autowired
 	InvoiceService invoiceService;
 
+	// http://localhost:8080/customers
+	
+	/*
+	 * JSON example for creating new company:
+	 * {
+	 * 	"name" : "CompanyX",
+	 * 	"pib" : "111222333",
+	 * 	"bankAccount" : "170-1122334455-17"
+	 * }
+	 */
+	
 	@PostMapping("/create")
 	public Customer createCustomer(@RequestBody CustomerDTO customerDto) {
-		ModelMapper modelMapper = new ModelMapper();
 		Customer customer = new Customer();
-		modelMapper.map(customerDto, customer);
+		BeanUtils.copyProperties(customerDto, customer);
 		return customerService.createCustomer(customer);
 	}
 
@@ -46,53 +56,39 @@ public class CustomerController {
 
 	@PutMapping("/update/{oldName}")
 	public Customer updateCustomer(@RequestBody CustomerDTO newCustomerDto, @PathVariable String oldName) {
-		ModelMapper modelMapper = new ModelMapper();
-		Customer newCustomer = new Customer();
-		modelMapper.map(newCustomerDto, newCustomer);
+		Customer newCustomer = customerService.customerDtoToCustomer(newCustomerDto, oldName);
 		return customerService.updateCustomer(newCustomer, oldName);
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public String deleteCustomer(@PathVariable Long id) {
-		return customerService.deleteCustomer(id);
+	@DeleteMapping("/delete/{name}")
+	public String deleteCustomer(@PathVariable String name) {
+		return customerService.deleteCustomer(name);
 	}
 
 	@GetMapping("/id/{id}")
 	public CustomerDTO findCustomerById(@PathVariable Long id) {
 		try {
-			ModelMapper modelMapper = new ModelMapper();
-			CustomerDTO customerDto = new CustomerDTO();
 			Customer customer = customerService.findById(id);
-			modelMapper.map(customer, customerDto);
-			return customerDto;
+			return customerService.customerToCustomerDto(customer);
 		} catch (NullPointerException e) {
 			e.getMessage();
-			return new CustomerDTO();
+			return null;
 		}
 	}
 
 	@GetMapping("/name/{name}")
 	public CustomerDTO findCustomerByName(@PathVariable String name) {
-		try {
-			ModelMapper modelMapper = new ModelMapper();
-			CustomerDTO customerDto = new CustomerDTO();
-			Customer customer = customerService.findByName(name);
-			modelMapper.map(customer, customerDto);
-			return customerDto;
-		} catch (NullPointerException e) {
-			e.getMessage();
-			return new CustomerDTO();
-		}
+		Customer customer = customerService.findByName(name);
+		if (customer != null)
+			return customerService.customerToCustomerDto(customer);
+		return null;
 	}
 
 	@GetMapping("/pib/{pib}")
 	public CustomerDTO findCustomerByPib(@PathVariable String pib) {
 		try {
-			ModelMapper modelMapper = new ModelMapper();
-			CustomerDTO customerDto = new CustomerDTO();
-			Customer customer = customerService.findByName(pib);
-			modelMapper.map(customer, customerDto);
-			return customerDto;
+			Customer customer = customerService.findByPib(pib);
+			return customerService.customerToCustomerDto(customer);
 		} catch (NullPointerException e) {
 			e.getMessage();
 			return new CustomerDTO();
@@ -102,7 +98,7 @@ public class CustomerController {
 	@GetMapping("/name/{name}/invoices")
 	public List<InvoiceDTO> getCustomerInvoices(@PathVariable String name) {
 		List<Invoice> invoices = customerService.findByName(name).getInvoices();
-		return invoiceService.changeInvoicesToInvoicesDTO(invoices);
+		return invoiceService.transformInvoicesToInvoicesDTO(invoices);
 	}
 
 	/*
@@ -127,12 +123,10 @@ public class CustomerController {
 
 	@GetMapping("/listAll")
 	public List<CustomerDTO> findAllCustomers() {
-		ModelMapper modelMapper = new ModelMapper();
 		List<Customer> customers = customerService.findAll();
 		List<CustomerDTO> customersDto = new ArrayList<>();
 		for (Customer customer : customers) {
-			CustomerDTO customerDto = new CustomerDTO();
-			modelMapper.map(customer, customerDto);
+			CustomerDTO customerDto = customerService.customerToCustomerDto(customer);
 			customersDto.add(customerDto);
 		}
 		return customersDto;

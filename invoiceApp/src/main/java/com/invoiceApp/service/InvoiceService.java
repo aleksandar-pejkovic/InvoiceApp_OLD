@@ -7,7 +7,6 @@ import java.util.NoSuchElementException;
 import javax.persistence.EntityExistsException;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,23 +23,25 @@ import com.invoiceApp.repository.InvoiceRepository;
 public class InvoiceService {
 
 	@Autowired
-	InvoiceRepository repository;
+	InvoiceRepository invoiceRepository;
 	@Autowired
 	CustomerService customerService;
 
+	ModelMapper modelMapper = new ModelMapper();
+
 	public Invoice createInvoice(Invoice invoice) {
-		if (repository.findByName(invoice.getName()) != null)
+		if (invoiceRepository.findByName(invoice.getName()) != null)
 			throw new EntityExistsException();
-		return repository.save(invoice);
+		return invoiceRepository.save(invoice);
 	}
 
 	public List<Invoice> createInvoices(List<Invoice> invoices) {
-		return (List<Invoice>) repository.saveAll(invoices);
+		return (List<Invoice>) invoiceRepository.saveAll(invoices);
 	}
 
 	public Invoice findById(Long id) {
 		try {
-			return repository.findById(id).get();
+			return invoiceRepository.findById(id).get();
 		} catch (NoSuchElementException e) {
 			System.out.println("No such element");
 			return null;
@@ -49,7 +50,7 @@ public class InvoiceService {
 
 	public Invoice findByName(String name) {
 		try {
-			return repository.findByName(name);
+			return invoiceRepository.findByName(name);
 		} catch (NoSuchElementException e) {
 			System.out.println("No such element");
 			return null;
@@ -58,7 +59,7 @@ public class InvoiceService {
 
 	public List<Invoice> findByCustomer(Customer customer) {
 		try {
-			return repository.findByCustomer(customer);
+			return invoiceRepository.findByCustomer(customer);
 		} catch (NoSuchElementException e) {
 			System.out.println("No such element");
 			return null;
@@ -66,25 +67,26 @@ public class InvoiceService {
 	}
 
 	public List<Invoice> findAll() {
-		return (List<Invoice>) repository.findAll();
+		return (List<Invoice>) invoiceRepository.findAll();
 	}
 
-	public Invoice update(Invoice invoice, Long id) {
+	public Invoice update(Invoice newInvoice, String name) {
 		try {
-			Invoice existingInvoice = repository.findById(id).get();
-			BeanUtils.copyProperties(invoice, existingInvoice, "id");
-			return repository.save(existingInvoice);
+			Invoice existingInvoice = invoiceRepository.findByName(name);
+			newInvoice.setId(existingInvoice.getId());
+			modelMapper.map(newInvoice, existingInvoice);
+			return invoiceRepository.save(existingInvoice);
 		} catch (NoSuchElementException e) {
 			e.toString();
 			return null;
 		}
 	}
 
-	public String deleteInvoice(Long id) {
+	public String deleteInvoice(String name) {
 		Invoice existingInvoice = new Invoice();
 		try {
-			existingInvoice = repository.findById(id).get();
-			repository.delete(existingInvoice);
+			existingInvoice = invoiceRepository.findByName(name);
+			invoiceRepository.delete(existingInvoice);
 			return "Invoice deleted";
 		} catch (NoSuchElementException e) {
 			e.toString();
@@ -96,27 +98,37 @@ public class InvoiceService {
 	 * This function changes list of Invoices and it's properties (items, product)
 	 * to their's respective DTO objects
 	 */
-	public List<InvoiceDTO> changeInvoicesToInvoicesDTO(List<Invoice> invoices) {
-		ModelMapper modelMapper = new ModelMapper();
+	public List<InvoiceDTO> transformInvoicesToInvoicesDTO(List<Invoice> invoices) {
 		List<InvoiceDTO> invoicesDto = new ArrayList<>();
+		InvoiceDTO invoiceDto = new InvoiceDTO();
 		for (Invoice invoice : invoices) {
-			List<Item> items = invoice.getItems();
-			List<ItemDTO> itemsDto = new ArrayList<>();
-			for (Item item : items) {
-				Product product = item.getProduct();
-				ProductDTO productDto = new ProductDTO();
-				modelMapper.map(product, productDto);
-				ItemDTO itemDto = new ItemDTO();
-				modelMapper.map(item, itemDto);
-				itemDto.setProductDto(productDto);
-				itemsDto.add(itemDto);
-			}
-			InvoiceDTO invoiceDto = new InvoiceDTO();
-			modelMapper.map(invoice, invoiceDto);
-			invoiceDto.setItems(itemsDto);
+			invoiceDto = invoiceToInvoiceDto(invoice);
 			invoicesDto.add(invoiceDto);
 		}
 		return invoicesDto;
 	}
 
+	public InvoiceDTO invoiceToInvoiceDto(Invoice invoice) {
+		List<Item> items = invoice.getItems();
+		List<ItemDTO> itemsDto = new ArrayList<>();
+		for (Item item : items) {
+			Product product = item.getProduct();
+			ProductDTO productDto = new ProductDTO();
+			modelMapper.map(product, productDto);
+			ItemDTO itemDto = new ItemDTO();
+			modelMapper.map(item, itemDto);
+			itemDto.setProductDto(productDto);
+			itemsDto.add(itemDto);
+		}
+		InvoiceDTO invoiceDto = new InvoiceDTO();
+		modelMapper.map(invoice, invoiceDto);
+		invoiceDto.setItems(itemsDto);
+		return invoiceDto;
+	}
+
+	public Invoice invoiceDtoToInvoice(InvoiceDTO invoiceDto) {
+		Invoice invoice = findByName(invoiceDto.getName());
+		modelMapper.map(invoiceDto, invoice);
+		return invoice;
+	}
 }
