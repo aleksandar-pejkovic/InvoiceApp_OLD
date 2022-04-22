@@ -32,27 +32,27 @@ public class CustomerController {
 	InvoiceService invoiceService;
 
 	// http://localhost:8080/customers
-	
+
 	/*
-	 * JSON example for creating new company:
-	 * {
-	 * 	"name" : "CompanyX",
-	 * 	"pib" : "111222333",
-	 * 	"bankAccount" : "170-1122334455-17"
-	 * }
+	 * JSON example for creating new company: { "name" : "CompanyX", "pib" :
+	 * "111222333", "bankAccount" : "170-1122334455-17" }
 	 */
-	
+
 	@PostMapping("/create")
-	public Customer createCustomer(@RequestBody CustomerDTO customerDto) {
+	public CustomerDTO createCustomer(@RequestBody CustomerDTO customerDto) {
 		Customer customer = new Customer();
 		BeanUtils.copyProperties(customerDto, customer);
-		return customerService.createCustomer(customer);
+		Customer storedCustomer = customerService.createCustomer(customer);
+		CustomerDTO returnValue = customerService.customerToCustomerDto(storedCustomer);
+		return returnValue;
 	}
 
 	@PutMapping("/update/{oldName}")
-	public Customer updateCustomer(@RequestBody CustomerDTO newCustomerDto, @PathVariable String oldName) {
+	public CustomerDTO updateCustomer(@RequestBody CustomerDTO newCustomerDto, @PathVariable String oldName) {
 		Customer newCustomer = customerService.customerDtoToCustomer(newCustomerDto, oldName);
-		return customerService.updateCustomer(newCustomer, oldName);
+		Customer storedCustomer = customerService.updateCustomer(newCustomer, oldName);
+		CustomerDTO returnValue = customerService.customerToCustomerDto(storedCustomer);
+		return returnValue;
 	}
 
 	@DeleteMapping("/delete/{name}")
