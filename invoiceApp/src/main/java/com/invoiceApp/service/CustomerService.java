@@ -58,13 +58,12 @@ public class CustomerService {
 		return (List<Customer>) customerRepository.findAll();
 	}
 
-	public Customer updateCustomer(Customer newCustomer, String oldName) {
+	public Customer updateCustomer(Customer customer) {
 		try {
-			Customer existingCustomer = customerRepository.findByName(oldName);
-			newCustomer.setId(existingCustomer.getId());
-			newCustomer.setInvoices(existingCustomer.getInvoices());
-			modelMapper.map(newCustomer, existingCustomer);
-			return customerRepository.save(existingCustomer);
+			Customer existingCustomer = customerRepository.findByPib(customer.getPib());
+			customer.setId(existingCustomer.getId());
+			customer.setInvoices(existingCustomer.getInvoices());
+			return customerRepository.save(customer);
 		} catch (NoSuchElementException e) {
 			e.toString();
 			return new Customer();
@@ -73,8 +72,8 @@ public class CustomerService {
 
 	public String deleteCustomer(String name) {
 		try {
-			Customer existingCustomer = customerRepository.findByName(name);
-			customerRepository.delete(existingCustomer);
+			Customer customer = customerRepository.findByName(name);
+			customerRepository.delete(customer);
 			return "Customer deleted";
 		} catch (NoSuchElementException e) {
 			e.toString();
@@ -90,12 +89,6 @@ public class CustomerService {
 
 	public Customer customerDtoToCustomer(CustomerDTO customerDto) {
 		Customer customer = findByName(customerDto.getName());
-		modelMapper.map(customerDto, customer);
-		return customer;
-	}
-
-	public Customer customerDtoToCustomer(CustomerDTO customerDto, String oldName) {
-		Customer customer = findByName(oldName);
 		modelMapper.map(customerDto, customer);
 		return customer;
 	}

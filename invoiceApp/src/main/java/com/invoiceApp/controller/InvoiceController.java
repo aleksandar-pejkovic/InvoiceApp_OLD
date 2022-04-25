@@ -32,10 +32,10 @@ public class InvoiceController {
 		return invoiceService.createInvoice(invoice);
 	}
 
-	@PutMapping("/update/{name}")
-	public Invoice updateInvoice(@RequestBody InvoiceDTO invoiceDto, @PathVariable String oldName) {
+	@PutMapping("/update")
+	public Invoice updateInvoice(@RequestBody InvoiceDTO invoiceDto) {
 		Invoice newInvoice = invoiceService.invoiceDtoToInvoice(invoiceDto);
-		return invoiceService.update(newInvoice, oldName);
+		return invoiceService.update(newInvoice);
 	}
 
 	@DeleteMapping("/{name}")
@@ -47,11 +47,6 @@ public class InvoiceController {
 	@GetMapping("/name/{name}")
 	public Invoice findInvoiceByName(@PathVariable String name) {
 		return invoiceService.findByName(name);
-	}
-
-	@GetMapping("/byCustomer")
-	public List<Invoice> findInvoiceByCustomer(@RequestBody Customer customer) {
-		return invoiceService.findByCustomer(customer);
 	}
 
 	@GetMapping

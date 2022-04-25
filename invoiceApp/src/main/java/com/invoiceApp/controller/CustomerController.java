@@ -47,10 +47,10 @@ public class CustomerController {
 		return returnValue;
 	}
 
-	@PutMapping("/update/{oldName}")
-	public CustomerDTO updateCustomer(@RequestBody CustomerDTO newCustomerDto, @PathVariable String oldName) {
-		Customer newCustomer = customerService.customerDtoToCustomer(newCustomerDto, oldName);
-		Customer storedCustomer = customerService.updateCustomer(newCustomer, oldName);
+	@PutMapping("/update")
+	public CustomerDTO updateCustomer(@RequestBody CustomerDTO newCustomerDto) {
+		Customer newCustomer = customerService.customerDtoToCustomer(newCustomerDto);
+		Customer storedCustomer = customerService.updateCustomer(newCustomer);
 		CustomerDTO returnValue = customerService.customerToCustomerDto(storedCustomer);
 		return returnValue;
 	}

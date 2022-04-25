@@ -5,15 +5,17 @@ public class ProductDTO {
 	private String barCode;
 	private String name;
 	private String unit;
+	private double vat;
 	private double price;
 
 	public ProductDTO() {
 	}
 
-	public ProductDTO(String barCode, String name, String unit, double price) {
+	public ProductDTO(String barCode, String name, String unit, double vat, double price) {
 		this.barCode = barCode;
 		this.name = name;
 		this.unit = unit;
+		this.vat = vat;
 		this.price = price;
 	}
 
@@ -39,6 +41,14 @@ public class ProductDTO {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+
+	public double getVat() {
+		return vat;
+	}
+
+	public void setVat(double vat) {
+		this.vat = vat;
 	}
 
 	public double getPrice() {

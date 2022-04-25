@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.invoiceApp.dto.InvoiceDTO;
 import com.invoiceApp.dto.ItemDTO;
 import com.invoiceApp.dto.ProductDTO;
-import com.invoiceApp.entity.Customer;
 import com.invoiceApp.entity.Invoice;
 import com.invoiceApp.entity.Item;
 import com.invoiceApp.entity.Product;
@@ -53,22 +52,13 @@ public class InvoiceService {
 		}
 	}
 
-	public List<Invoice> findByCustomer(Customer customer) {
-		try {
-			return invoiceRepository.findByCustomer(customer);
-		} catch (NoSuchElementException e) {
-			System.out.println("No such element");
-			return null;
-		}
-	}
-
 	public List<Invoice> findAll() {
 		return (List<Invoice>) invoiceRepository.findAll();
 	}
 
-	public Invoice update(Invoice newInvoice, String name) {
+	public Invoice update(Invoice newInvoice) {
 		try {
-			Invoice existingInvoice = invoiceRepository.findByName(name);
+			Invoice existingInvoice = invoiceRepository.findByName(newInvoice.getName());
 			newInvoice.setId(existingInvoice.getId());
 			modelMapper.map(newInvoice, existingInvoice);
 			return invoiceRepository.save(existingInvoice);

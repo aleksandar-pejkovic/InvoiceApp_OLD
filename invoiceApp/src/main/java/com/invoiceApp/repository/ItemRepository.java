@@ -7,5 +7,5 @@ import com.invoiceApp.entity.Item;
 
 @Repository
 public interface ItemRepository extends CrudRepository<Item, Long>{
-
+	
 }

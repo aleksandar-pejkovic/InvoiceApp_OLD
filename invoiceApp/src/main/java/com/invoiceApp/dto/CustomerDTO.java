@@ -3,18 +3,31 @@ package com.invoiceApp.dto;
 public class CustomerDTO {
 
 	private String name;
+	private String address;
+	private String zip;
+	private String city;
 	private String pib;
+	private String mb;
+	private String phone;
 	private String bankAccount;
+	private String email;
 
 	public CustomerDTO() {
 		super();
 	}
 
-	public CustomerDTO(String name, String pib, String bankAccount) {
+	public CustomerDTO(String name, String address, String zip, String city, String pib, String mb, String phone,
+			String bankAccount, String email) {
 		super();
 		this.name = name;
+		this.address = address;
+		this.zip = zip;
+		this.city = city;
 		this.pib = pib;
+		this.mb = mb;
+		this.phone = phone;
 		this.bankAccount = bankAccount;
+		this.email = email;
 	}
 
 	public String getName() {
@@ -25,6 +38,30 @@ public class CustomerDTO {
 		this.name = name;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getZip() {
+		return zip;
+	}
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
 	public String getPib() {
 		return pib;
 	}
@@ -33,12 +70,36 @@ public class CustomerDTO {
 		this.pib = pib;
 	}
 
+	public String getMb() {
+		return mb;
+	}
+
+	public void setMb(String mb) {
+		this.mb = mb;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	public String getBankAccount() {
 		return bankAccount;
 	}
 
 	public void setBankAccount(String bankAccount) {
 		this.bankAccount = bankAccount;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }

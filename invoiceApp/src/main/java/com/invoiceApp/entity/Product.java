@@ -19,6 +19,7 @@ public class Product {
 	private String barCode;
 	private String name;
 	private String unit;
+	private double vat;
 	private double price;
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Item> items;
@@ -27,12 +28,13 @@ public class Product {
 		super();
 	}
 
-	public Product(Long id, String barCode, String name, String unit, double price, List<Item> items) {
+	public Product(Long id, String barCode, String name, String unit, double vat, double price, List<Item> items) {
 		super();
 		this.id = id;
 		this.barCode = barCode;
 		this.name = name;
 		this.unit = unit;
+		this.vat = vat;
 		this.price = price;
 		this.items = items;
 	}
@@ -69,6 +71,14 @@ public class Product {
 		this.unit = unit;
 	}
 
+	public double getVat() {
+		return vat;
+	}
+
+	public void setVat(double vat) {
+		this.vat = vat;
+	}
+
 	public double getPrice() {
 		return price;
 	}
@@ -81,7 +91,7 @@ public class Product {
 		return items;
 	}
 
-	public void setItem(List<Item> items) {
+	public void setItems(List<Item> items) {
 		this.items = items;
 	}
 
