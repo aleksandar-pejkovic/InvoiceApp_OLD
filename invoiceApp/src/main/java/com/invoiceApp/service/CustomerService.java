@@ -60,9 +60,6 @@ public class CustomerService {
 
 	public Customer updateCustomer(Customer customer) {
 		try {
-			Customer existingCustomer = customerRepository.findByPib(customer.getPib());
-			customer.setId(existingCustomer.getId());
-			customer.setInvoices(existingCustomer.getInvoices());
 			return customerRepository.save(customer);
 		} catch (NoSuchElementException e) {
 			e.toString();
@@ -88,9 +85,12 @@ public class CustomerService {
 	}
 
 	public Customer customerDtoToCustomer(CustomerDTO customerDto) {
+		Customer returnValue = new Customer();
 		Customer customer = findByName(customerDto.getName());
-		modelMapper.map(customerDto, customer);
-		return customer;
+		modelMapper.map(customerDto, returnValue);
+		returnValue.setId(customer.getId());
+		returnValue.setInvoices(customer.getInvoices());
+		return returnValue;
 	}
 
 }

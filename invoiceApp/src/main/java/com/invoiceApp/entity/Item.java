@@ -18,6 +18,7 @@ public class Item {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
+	private double total;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "invoice_id", nullable = false)
 	private Invoice invoice;
@@ -32,6 +33,7 @@ public class Item {
 		this.amount = amount;
 		this.product = product;
 		this.invoice = invoice;
+		this.setTotal();
 	}
 
 	public Long getId() {
@@ -64,6 +66,14 @@ public class Item {
 
 	public void setInvoice(Invoice invoice) {
 		this.invoice = invoice;
+	}
+
+	public double getTotal() {
+		return total;
+	}
+
+	public void setTotal() {
+		this.total = amount * this.product.getPrice();
 	}
 
 }

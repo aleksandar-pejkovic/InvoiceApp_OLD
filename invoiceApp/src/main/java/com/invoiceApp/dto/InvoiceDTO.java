@@ -36,11 +36,11 @@ public class InvoiceDTO {
 		this.date = date;
 	}
 
-	public CustomerDTO getCustomer() {
+	public CustomerDTO getCustomerDto() {
 		return customerDto;
 	}
 
-	public void setCustomer(CustomerDTO customerDto) {
+	public void setCustomerDto(CustomerDTO customerDto) {
 		this.customerDto = customerDto;
 	}
 
@@ -48,7 +48,7 @@ public class InvoiceDTO {
 		return itemsDto;
 	}
 
-	public void setItems(List<ItemDTO> itemsDto) {
+	public void setItemsDto(List<ItemDTO> itemsDto) {
 		this.itemsDto = itemsDto;
 	}
 

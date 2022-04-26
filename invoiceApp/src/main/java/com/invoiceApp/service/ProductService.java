@@ -89,7 +89,6 @@ public class ProductService {
 
 	public Product convertToProduct(ProductDTO productDto) {
 		Product product = findByName(productDto.getName());
-		modelMapper.map(productDto, product);
 		return product;
 	}
 
