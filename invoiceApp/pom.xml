@@ -52,8 +52,6 @@
 			<groupId>org.thymeleaf</groupId>
 			<artifactId>thymeleaf</artifactId>
 		</dependency>
-
-
 	</dependencies>
 
 	<build>
