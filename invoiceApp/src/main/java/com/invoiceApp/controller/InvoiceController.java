@@ -51,9 +51,10 @@ public class InvoiceController {
 		return null;
 	}
 
-	@GetMapping
-	public List<Invoice> findAllInvoices() {
-		return invoiceService.findAll();
+	@GetMapping("/listAll")
+	public List<InvoiceDTO> findAllInvoices() {
+		List<Invoice> invoices = invoiceService.findAll();
+		return invoiceService.transformInvoicesToInvoicesDTO(invoices);
 	}
 
 }

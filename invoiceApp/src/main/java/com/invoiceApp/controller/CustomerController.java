@@ -38,7 +38,7 @@ public class CustomerController {
 	 * "111222333", "bankAccount" : "170-1122334455-17" }
 	 */
 
-	@PostMapping("/create")
+	@PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
 	public CustomerDTO createCustomer(@RequestBody CustomerDTO customerDto) {
 		Customer customer = new Customer();
 		BeanUtils.copyProperties(customerDto, customer);
@@ -105,7 +105,7 @@ public class CustomerController {
 	 * return returnValue; }
 	 */
 
-	@GetMapping("/listAll")
+	@GetMapping(value = "/listAll", produces = "application/json")
 	public List<CustomerDTO> findAllCustomers() {
 		List<Customer> customers = customerService.findAll();
 		List<CustomerDTO> customersDto = new ArrayList<>();

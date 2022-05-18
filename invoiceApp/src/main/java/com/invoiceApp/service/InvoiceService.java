@@ -10,7 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.invoiceApp.dto.CustomerDTO;
 import com.invoiceApp.dto.InvoiceDTO;
 import com.invoiceApp.dto.ItemDTO;
 import com.invoiceApp.dto.ProductDTO;
@@ -99,7 +98,7 @@ public class InvoiceService {
 	}
 
 	public InvoiceDTO invoiceToInvoiceDto(Invoice invoice) {
-		List<Item> items = invoice.getItems();
+		/*List<Item> items = invoice.getItems();
 		List<ItemDTO> itemsDto = new ArrayList<>();
 		for (Item item : items) {
 			Product product = item.getProduct();
@@ -109,25 +108,23 @@ public class InvoiceService {
 			itemDto.setProductDto(productDto);
 			itemDto.setTotal();
 			itemsDto.add(itemDto);
-		}
+		}*/
 		InvoiceDTO invoiceDto = new InvoiceDTO();
 		modelMapper.map(invoice, invoiceDto);
-		invoiceDto.setItemsDto(itemsDto);
+		//invoiceDto.setItemsDto(itemsDto);
 		Customer customer = customerService.findByName(invoice.getCustomer().getName());
-		CustomerDTO customerDto = customerService.customerToCustomerDto(customer);
-		invoiceDto.setCustomerDto(customerDto);
+		invoiceDto.setCustomerName(customer.getName());
 		return invoiceDto;
 	}
 
 	public Invoice invoiceDtoToInvoice(InvoiceDTO invoiceDto) {
-		List<ItemDTO> itemsDto = invoiceDto.getItemsDto();
+		//List<ItemDTO> itemsDto = invoiceDto.getItemsDto();
 		List<Item> items = new ArrayList<>();
 		Invoice returnValue = new Invoice();
 		modelMapper.map(invoiceDto, returnValue);
-		CustomerDTO customerDto = invoiceDto.getCustomerDto();
-		Customer customer = customerService.customerDtoToCustomer(customerDto);
+		Customer customer = customerService.findByName(invoiceDto.getCustomerName());
 		returnValue.setCustomer(customer);
-		for (ItemDTO itemDto : itemsDto) {
+		/*for (ItemDTO itemDto : itemsDto) {
 			ProductDTO productDto = itemDto.getProductDto();
 			Product product = productService.convertToProduct(productDto);
 			Item item = new Item();
@@ -136,7 +133,7 @@ public class InvoiceService {
 			item.setInvoice(returnValue);
 			item.setTotal();
 			items.add(item);
-		}
+		}*/
 		returnValue.setItems(items);
 		return returnValue;
 	}
