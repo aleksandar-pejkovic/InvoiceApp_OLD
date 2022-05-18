@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.invoiceApp.dto.ItemDTO;
 import com.invoiceApp.entity.Item;
 import com.invoiceApp.service.ItemService;
 
@@ -19,8 +20,9 @@ public class ItemController {
 	ItemService itemService;
 
 	@GetMapping("/list/{invoiceName}")
-	public List<Item> findItems(@PathVariable String invoiceName){
-		return itemService.findItems(invoiceName);
+	public List<ItemDTO> findItems(@PathVariable String invoiceName){
+		List<Item> items = itemService.findItems(invoiceName);
+		return itemService.transformToItemDTO(items);
 	}
 	
 }

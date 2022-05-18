@@ -3,16 +3,19 @@ package com.invoiceApp.dto;
 public class ItemDTO {
 
 	private double amount;
-	private ProductDTO productDto;
+	private String productName;
+	private double productPrice;
 	private double total;
 
 	public ItemDTO() {
 	}
 
-	public ItemDTO(double amount, ProductDTO productDto) {
+	public ItemDTO(double amount, String productName, double productPrice, double total) {
+		super();
 		this.amount = amount;
-		this.productDto = productDto;
-		this.setTotal();
+		this.productName = productName;
+		this.productPrice = productPrice;
+		this.total = total;
 	}
 
 	public double getAmount() {
@@ -23,20 +26,28 @@ public class ItemDTO {
 		this.amount = amount;
 	}
 
-	public ProductDTO getProductDto() {
-		return productDto;
+	public String getProductName() {
+		return productName;
 	}
 
-	public void setProductDto(ProductDTO productDto) {
-		this.productDto = productDto;
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public double getProductPrice() {
+		return productPrice;
+	}
+
+	public void setProductPrice(double productPrice) {
+		this.productPrice = productPrice;
 	}
 
 	public double getTotal() {
 		return total;
 	}
-	
-	public void setTotal() {
-		this.total = amount * this.productDto.getPrice();
+
+	public void setTotal(double total) {
+		this.total = total;
 	}
 
 }
