@@ -10,14 +10,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.invoiceApp.dto.InvoiceDTO;
-import com.invoiceApp.dto.ItemDTO;
-import com.invoiceApp.dto.ProductDTO;
 import com.invoiceApp.entity.Customer;
 import com.invoiceApp.entity.Invoice;
-import com.invoiceApp.entity.Item;
-import com.invoiceApp.entity.Product;
 import com.invoiceApp.repository.InvoiceRepository;
+import com.invoiceApp.request.InvoiceRequest;
+import com.invoiceApp.response.InvoiceResponse;
 
 @Service
 public class InvoiceService {
@@ -87,54 +84,48 @@ public class InvoiceService {
 	 * This function changes list of Invoices and it's properties (items, product)
 	 * to their's respective DTO objects
 	 */
-	public List<InvoiceDTO> transformInvoicesToInvoicesDTO(List<Invoice> invoices) {
-		List<InvoiceDTO> invoicesDto = new ArrayList<>();
-		InvoiceDTO invoiceDto = new InvoiceDTO();
+	public List<InvoiceResponse> transformInvoicesToInvoicesDTO(List<Invoice> invoices) {
+		List<InvoiceResponse> invoicesDto = new ArrayList<>();
+		InvoiceResponse invoiceDto = new InvoiceResponse();
 		for (Invoice invoice : invoices) {
-			invoiceDto = invoiceToInvoiceDto(invoice);
+			invoiceDto = invoiceToInvoiceResponse(invoice);
 			invoicesDto.add(invoiceDto);
 		}
 		return invoicesDto;
 	}
 
-	public InvoiceDTO invoiceToInvoiceDto(Invoice invoice) {
-		/*List<Item> items = invoice.getItems();
-		List<ItemDTO> itemsDto = new ArrayList<>();
-		for (Item item : items) {
-			Product product = item.getProduct();
-			ProductDTO productDto = productService.convertToProductDto(product);
-			ItemDTO itemDto = new ItemDTO();
-			modelMapper.map(item, itemDto);
-			itemDto.setProductDto(productDto);
-			itemDto.setTotal();
-			itemsDto.add(itemDto);
-		}*/
-		InvoiceDTO invoiceDto = new InvoiceDTO();
-		modelMapper.map(invoice, invoiceDto);
-		//invoiceDto.setItemsDto(itemsDto);
+	public InvoiceResponse invoiceToInvoiceResponse(Invoice invoice) {
+		/*
+		 * List<Item> items = invoice.getItems(); List<ItemDTO> itemsDto = new
+		 * ArrayList<>(); for (Item item : items) { Product product = item.getProduct();
+		 * ProductDTO productDto = productService.convertToProductDto(product); ItemDTO
+		 * itemDto = new ItemDTO(); modelMapper.map(item, itemDto);
+		 * itemDto.setProductDto(productDto); itemDto.setTotal(); itemsDto.add(itemDto);
+		 * }
+		 */
+		InvoiceResponse invoiceResponse = new InvoiceResponse();
+		modelMapper.map(invoice, invoiceResponse);
+		// invoiceDto.setItemsDto(itemsDto);
 		Customer customer = customerService.findByName(invoice.getCustomer().getName());
-		invoiceDto.setCustomerName(customer.getName());
-		return invoiceDto;
+		invoiceResponse.setCustomerName(customer.getName());
+		return invoiceResponse;
 	}
 
-	public Invoice invoiceDtoToInvoice(InvoiceDTO invoiceDto) {
-		//List<ItemDTO> itemsDto = invoiceDto.getItemsDto();
-		List<Item> items = new ArrayList<>();
-		Invoice returnValue = new Invoice();
-		modelMapper.map(invoiceDto, returnValue);
-		Customer customer = customerService.findByName(invoiceDto.getCustomerName());
-		returnValue.setCustomer(customer);
-		/*for (ItemDTO itemDto : itemsDto) {
-			ProductDTO productDto = itemDto.getProductDto();
-			Product product = productService.convertToProduct(productDto);
-			Item item = new Item();
-			modelMapper.map(itemDto, item);
-			item.setProduct(product);
-			item.setInvoice(returnValue);
-			item.setTotal();
-			items.add(item);
-		}*/
-		returnValue.setItems(items);
-		return returnValue;
+	public Invoice invoiceRequestToInvoice(InvoiceRequest invoiceRequest) {
+		// List<ItemDTO> itemsDto = invoiceDto.getItemsDto();
+
+		Invoice invoice = new Invoice();
+		modelMapper.map(invoiceRequest, invoice);
+		Customer customer = customerService.findByName(invoiceRequest.getCustomerName());
+		invoice.setCustomer(customer);
+		/*
+		 * List<Item> items = new ArrayList<>(); for (ItemDTO itemDto : itemsDto) {
+		 * ProductDTO productDto = itemDto.getProductDto(); Product product =
+		 * productService.convertToProduct(productDto); Item item = new Item();
+		 * modelMapper.map(itemDto, item); item.setProduct(product);
+		 * item.setInvoice(returnValue); item.setTotal(); items.add(item); }
+		 * invoice.setItems(items);
+		 */
+		return invoice;
 	}
 }

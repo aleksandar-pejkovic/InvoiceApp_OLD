@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.invoiceApp.dto.InvoiceDTO;
 import com.invoiceApp.entity.Invoice;
+import com.invoiceApp.request.InvoiceRequest;
+import com.invoiceApp.response.InvoiceResponse;
 import com.invoiceApp.service.InvoiceService;
 
 @RestController
@@ -24,16 +25,16 @@ public class InvoiceController {
 	InvoiceService invoiceService;
 
 	@PostMapping("/create")
-	public InvoiceDTO createInvoice(@RequestBody InvoiceDTO invoiceDto) {
-		Invoice invoice = invoiceService.invoiceDtoToInvoice(invoiceDto);
+	public InvoiceResponse createInvoice(@RequestBody InvoiceRequest invoiceRequest) {
+		Invoice invoice = invoiceService.invoiceRequestToInvoice(invoiceRequest);
 		Invoice storedInvoice = invoiceService.createInvoice(invoice);
-		InvoiceDTO returnValue = invoiceService.invoiceToInvoiceDto(storedInvoice);
+		InvoiceResponse returnValue = invoiceService.invoiceToInvoiceResponse(storedInvoice);
 		return returnValue;
 	}
 
 	@PutMapping("/update")
-	public Invoice updateInvoice(@RequestBody InvoiceDTO invoiceDto) {
-		Invoice newInvoice = invoiceService.invoiceDtoToInvoice(invoiceDto);
+	public Invoice updateInvoice(@RequestBody InvoiceRequest invoiceRequest) {
+		Invoice newInvoice = invoiceService.invoiceRequestToInvoice(invoiceRequest);
 		return invoiceService.update(newInvoice);
 	}
 
@@ -44,15 +45,15 @@ public class InvoiceController {
 
 
 	@GetMapping("/name/{name}")
-	public InvoiceDTO findInvoiceByName(@PathVariable String name) {
+	public InvoiceResponse findInvoiceByName(@PathVariable String name) {
 		Invoice invoice = invoiceService.findByName(name);
 		if(invoice != null)
-			return invoiceService.invoiceToInvoiceDto(invoice);
+			return invoiceService.invoiceToInvoiceResponse(invoice);
 		return null;
 	}
 
 	@GetMapping("/listAll")
-	public List<InvoiceDTO> findAllInvoices() {
+	public List<InvoiceResponse> findAllInvoices() {
 		List<Invoice> invoices = invoiceService.findAll();
 		return invoiceService.transformInvoicesToInvoicesDTO(invoices);
 	}

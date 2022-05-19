@@ -1,6 +1,6 @@
-package com.invoiceApp.dto;
+package com.invoiceApp.response;
 
-public class ProductDTO {
+public class ProductResponse {
 
 	private String barCode;
 	private String name;
@@ -8,10 +8,10 @@ public class ProductDTO {
 	private double vat;
 	private double price;
 
-	public ProductDTO() {
+	public ProductResponse() {
 	}
 
-	public ProductDTO(String barCode, String name, String unit, double vat, double price) {
+	public ProductResponse(String barCode, String name, String unit, double vat, double price) {
 		this.barCode = barCode;
 		this.name = name;
 		this.unit = unit;

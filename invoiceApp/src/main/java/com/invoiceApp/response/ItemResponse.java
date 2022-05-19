@@ -1,19 +1,19 @@
-package com.invoiceApp.dto;
+package com.invoiceApp.response;
 
-public class ItemDTO {
+public class ItemResponse {
 
-	private double amount;
 	private String productName;
+	private double amount;
 	private double productPrice;
 	private double total;
 
-	public ItemDTO() {
+	public ItemResponse() {
 	}
 
-	public ItemDTO(double amount, String productName, double productPrice, double total) {
+	public ItemResponse(String productName, double amount, double productPrice, double total) {
 		super();
-		this.amount = amount;
 		this.productName = productName;
+		this.amount = amount;		
 		this.productPrice = productPrice;
 		this.total = total;
 	}

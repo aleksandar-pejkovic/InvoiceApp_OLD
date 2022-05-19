@@ -1,6 +1,6 @@
-package com.invoiceApp.dto;
+package com.invoiceApp.response;
 
-public class CustomerDTO {
+public class CustomerResponse {
 
 	private String name;
 	private String address;
@@ -12,11 +12,11 @@ public class CustomerDTO {
 	private String bankAccount;
 	private String email;
 
-	public CustomerDTO() {
+	public CustomerResponse() {
 		super();
 	}
 
-	public CustomerDTO(String name, String address, String zip, String city, String pib, String mb, String phone,
+	public CustomerResponse(String name, String address, String zip, String city, String pib, String mb, String phone,
 			String bankAccount, String email) {
 		super();
 		this.name = name;

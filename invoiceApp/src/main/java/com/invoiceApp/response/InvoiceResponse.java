@@ -1,17 +1,17 @@
-package com.invoiceApp.dto;
+package com.invoiceApp.response;
 
 import java.util.Date;
 
-public class InvoiceDTO {
+public class InvoiceResponse {
 
 	private String name;
 	private Date date;
 	private String customerName;
 
-	public InvoiceDTO() {
+	public InvoiceResponse() {
 	}
 
-	public InvoiceDTO(String name, Date date, String customerName) {
+	public InvoiceResponse(String name, Date date, String customerName) {
 		this.name = name;
 		this.date = date;
 		this.customerName = customerName;

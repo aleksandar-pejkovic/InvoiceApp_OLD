@@ -7,20 +7,28 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.invoiceApp.dto.ItemDTO;
 import com.invoiceApp.entity.Invoice;
 import com.invoiceApp.entity.Item;
+import com.invoiceApp.entity.Product;
 import com.invoiceApp.repository.ItemRepository;
+import com.invoiceApp.request.ItemRequest;
+import com.invoiceApp.response.ItemResponse;
 
 @Service
 public class ItemService {
-	
+
 	@Autowired
 	ItemRepository itemRepository;
 	@Autowired
 	InvoiceService invoiceService;
-	
-	public List<Item> findItems(String invoiceName){
+	@Autowired
+	ProductService productService;
+
+	public Item createItem(Item item) {
+		return itemRepository.save(item);
+	}
+
+	public List<Item> findItems(String invoiceName) {
 		try {
 			Invoice invoice = invoiceService.findByName(invoiceName);
 			return itemRepository.findByInvoice(invoice);
@@ -29,17 +37,36 @@ public class ItemService {
 		}
 		return null;
 	}
-	
-	public List<ItemDTO> transformToItemDTO(List<Item> items){
-		List<ItemDTO> itemsDto = new ArrayList<ItemDTO>();
+
+	public List<ItemResponse> itemToItemResponse(List<Item> items) {
+		List<ItemResponse> itemsResponse = new ArrayList<ItemResponse>();
 		for (Item item : items) {
-			ItemDTO itemDto = new ItemDTO();
-			BeanUtils.copyProperties(item, itemDto);
-			itemDto.setProductName(item.getProduct().getName());
-			itemDto.setProductPrice(item.getProduct().getPrice());
-			itemsDto.add(itemDto);
+			ItemResponse itemResponse = new ItemResponse();
+			BeanUtils.copyProperties(item, itemResponse);
+			itemResponse.setProductName(item.getProduct().getName());
+			itemResponse.setProductPrice(item.getProduct().getPrice());
+			itemsResponse.add(itemResponse);
 		}
-		return itemsDto;
+		return itemsResponse;
+	}
+
+	public ItemResponse itemToItemResponse(Item item) {
+		ItemResponse itemResponse = new ItemResponse();
+		BeanUtils.copyProperties(item, itemResponse);
+		itemResponse.setProductName(item.getProduct().getName());
+		itemResponse.setProductPrice(item.getProduct().getPrice());
+		return itemResponse;
+	}
+
+	public Item itemRequestToItem(ItemRequest itemRequest) {
+		Item item = new Item();
+		BeanUtils.copyProperties(itemRequest, item);
+		Product product = productService.findByName(itemRequest.getProductName());
+		Invoice invoice = invoiceService.findByName(itemRequest.getInvoiceName());
+		item.setProduct(product);
+		item.setInvoice(invoice);
+		item.setTotal();
+		return item;
 	}
 
 }

@@ -9,9 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.invoiceApp.dto.ProductDTO;
 import com.invoiceApp.entity.Product;
 import com.invoiceApp.repository.ProductRepository;
+import com.invoiceApp.response.ProductResponse;
 
 @Service
 public class ProductService {
@@ -81,13 +81,13 @@ public class ProductService {
 		}
 	}
 
-	public ProductDTO convertToProductDto(Product product) {
-		ProductDTO productDto = new ProductDTO();
+	public ProductResponse convertToProductDto(Product product) {
+		ProductResponse productDto = new ProductResponse();
 		modelMapper.map(product, productDto);
 		return productDto;
 	}
 
-	public Product convertToProduct(ProductDTO productDto) {
+	public Product convertToProduct(ProductResponse productDto) {
 		Product product = findByName(productDto.getName());
 		return product;
 	}

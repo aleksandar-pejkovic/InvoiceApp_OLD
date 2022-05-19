@@ -14,10 +14,10 @@ public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private double amount;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
+	private double amount;
 	private double total;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "invoice_id", nullable = false)
@@ -27,7 +27,7 @@ public class Item {
 		super();
 	}
 
-	public Item(Long id, double amount, Product product, Invoice invoice) {
+	public Item(Long id, Product product, double amount, Invoice invoice) {
 		super();
 		this.id = id;
 		this.amount = amount;
@@ -73,7 +73,7 @@ public class Item {
 	}
 
 	public void setTotal() {
-		this.total = amount * this.product.getPrice();
+		this.total = this.amount * this.product.getPrice();
 	}
 
 }
